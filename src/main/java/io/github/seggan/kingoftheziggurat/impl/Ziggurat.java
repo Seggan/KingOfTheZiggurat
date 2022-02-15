@@ -55,16 +55,13 @@ public class Ziggurat {
         }
         for (Bot bot : players.keySet()) {
             for (Bot other : players.keySet()) {
-                if (bot != other) {
-                    if (bot.getPosition().equals(other.getPosition()) && !bot.fought && !other.fought) {
-                        fightBots(bot, other);
-                    }
+                if (bot != other && bot.getPosition().equals(other.getPosition())) {
+                    fightBots(bot, other);
                 }
             }
         }
         for (Bot bot : players.keySet()) {
             bot.points += bot.getElevation();
-            bot.fought = false;
         }
     }
 
@@ -93,9 +90,6 @@ public class Ziggurat {
         } else {
             moveBotDown(bot);
         }
-
-        bot.fought = true;
-        other.fought = true;
     }
 
     private void moveBotDown(Bot bot) {

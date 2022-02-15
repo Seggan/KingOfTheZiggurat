@@ -8,8 +8,6 @@ public abstract class Bot {
     int strength = 0;
     int points = 0;
 
-    boolean fought = false;
-
     Ziggurat ziggurat;
 
     MoveDirection direction = MoveDirection.NONE;
