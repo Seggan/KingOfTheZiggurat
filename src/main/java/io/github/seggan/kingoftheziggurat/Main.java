@@ -47,7 +47,8 @@ public class Main {
         Bot[] bots = new Bot[]{
             new AttackBot(),
             new RandomBot(),
-            new ScaredyBot()
+            new ScaredyBot(),
+            new BotWrapper("python", "test.py")
         };
 
         int index;

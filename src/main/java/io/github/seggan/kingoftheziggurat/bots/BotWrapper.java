@@ -6,43 +6,66 @@ import io.github.seggan.kingoftheziggurat.Bot;
 import io.github.seggan.kingoftheziggurat.Main;
 import io.github.seggan.kingoftheziggurat.MoveDirection;
 
+import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.UncheckedIOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BotWrapper extends Bot implements Closeable {
 
+    private final int port = ThreadLocalRandom.current().nextInt(10000, 20000);
     private final Process process;
-    private final Scanner processOutput;
-    private final PrintStream processInput;
+    private final ServerSocket server;
+    private final Socket connection;
+
+    private final PrintWriter out;
+    private final BufferedReader in;
 
     public BotWrapper(String... process) {
         try {
-            this.process = new ProcessBuilder(process).start();
-            this.processOutput = new Scanner(this.process.getInputStream());
-            this.processInput = new PrintStream(this.process.getOutputStream());
+            String[] args = Arrays.copyOf(process, process.length + 1);
+            args[process.length] = Integer.toString(port);
+            this.process = new ProcessBuilder(args).inheritIO().start();
+            this.server = new ServerSocket(port);
+            this.connection = server.accept();
+            this.out = new PrintWriter(connection.getOutputStream(), true);
+            this.in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     protected boolean fight(Bot opponent) {
-        processInput.println("fight");
-        processInput.println(buildJson());
-        return Boolean.parseBoolean(processOutput.nextLine());
+        out.println("fight");
+        JsonObject json = buildJson();
+        json.add("opponent", opponent.toJson());
+        out.println(json);
+        try {
+            return in.readLine().equalsIgnoreCase("true");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     protected void tick() {
-        processInput.println("tick");
-        processInput.println(buildJson());
-        move(MoveDirection.valueOf(processOutput.nextLine()));
+        out.println("tick");
+        out.println(buildJson());
+        try {
+            move(MoveDirection.valueOf(in.readLine()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private String buildJson() {
+    private JsonObject buildJson() {
         JsonObject json = new JsonObject();
         json.addProperty("x", getPosition().x);
         json.addProperty("y", getPosition().y);
@@ -56,11 +79,19 @@ public class BotWrapper extends Bot implements Closeable {
         }
         json.add("players", players);
 
-        return json.toString();
+        return json;
     }
 
     @Override
     public void close() {
-        process.destroy();
+        try {
+            out.close();
+            in.close();
+            connection.close();
+            server.close();
+            process.destroy();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
