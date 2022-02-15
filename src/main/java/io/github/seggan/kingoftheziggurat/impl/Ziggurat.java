@@ -74,15 +74,18 @@ public class Ziggurat {
         if (bot.fight(other)) {
             currentBot = other;
             if (other.fight(bot)) {
-                if (r.nextInt(bot.strength / 2, bot.strength) >
-                    r.nextInt(other.strength / 2, other.strength)) {
+                int bot1 = r.nextInt(bot.strength / 2, bot.strength);
+                int bot2 = r.nextInt(other.strength / 2, other.strength);
+                if (bot1 > bot2) {
                     other.strength -= other.strength * 0.2;
                     bot.strength -= bot.strength * 0.1;
                     moveBotDown(other);
                 } else {
-                    bot.strength -= bot.strength * 0.2;
-                    other.strength -= other.strength * 0.1;
-                    moveBotDown(bot);
+                    if (bot1 != bot2) {
+                        bot.strength -= bot.strength * 0.2;
+                        other.strength -= other.strength * 0.1;
+                        moveBotDown(bot);
+                    }
                 }
             } else {
                 moveBotDown(other);
