@@ -1,4 +1,4 @@
-package io.github.seggan.kingoftheziggurat.impl;
+package io.github.seggan.kingoftheziggurat;
 
 public enum MoveDirection {
     UP,

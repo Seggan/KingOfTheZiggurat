@@ -1,7 +1,7 @@
 package io.github.seggan.kingoftheziggurat.bots;
 
-import io.github.seggan.kingoftheziggurat.impl.Bot;
-import io.github.seggan.kingoftheziggurat.impl.MoveDirection;
+import io.github.seggan.kingoftheziggurat.Bot;
+import io.github.seggan.kingoftheziggurat.MoveDirection;
 
 import java.util.concurrent.ThreadLocalRandom;
 

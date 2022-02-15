@@ -1,6 +1,6 @@
 package io.github.seggan.kingoftheziggurat.bots;
 
-import io.github.seggan.kingoftheziggurat.impl.Bot;
+import io.github.seggan.kingoftheziggurat.Bot;
 
 public class AttackBot extends Bot {
     @Override

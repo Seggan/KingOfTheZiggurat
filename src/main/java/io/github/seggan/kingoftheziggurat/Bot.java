@@ -1,4 +1,6 @@
-package io.github.seggan.kingoftheziggurat.impl;
+package io.github.seggan.kingoftheziggurat;
+
+import com.google.gson.JsonObject;
 
 import java.awt.*;
 import java.util.Set;
@@ -54,6 +56,15 @@ public abstract class Bot {
                 return;
             }
         }
+    }
+
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject();
+        json.addProperty("elevation", getElevation());
+        json.addProperty("x", getPosition().x);
+        json.addProperty("y", getPosition().y);
+        json.addProperty("name", getClass().getSimpleName());
+        return json;
     }
 
     protected abstract boolean fight(Bot opponent);

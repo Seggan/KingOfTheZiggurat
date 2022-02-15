@@ -1,8 +1,9 @@
-package io.github.seggan.kingoftheziggurat.impl;
+package io.github.seggan.kingoftheziggurat;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -107,7 +108,7 @@ public class Ziggurat {
     }
 
     public Set<Bot> getPlayers() {
-        return new HashSet<>(players.keySet());
+        return new LinkedHashSet<>(players.keySet());
     }
 
     Point getPosition(Bot bot) {
