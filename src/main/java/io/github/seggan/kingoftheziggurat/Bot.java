@@ -17,15 +17,15 @@ public abstract class Bot {
     public Bot() {
     }
 
-    public Point getPosition() {
+    public final Point getPosition() {
         return ziggurat.getPosition(this);
     }
 
-    public int getElevation() {
+    public final int getElevation() {
         return ziggurat.getElevation(getPosition());
     }
 
-    public int getStrength() {
+    public final int getStrength() {
         if (ziggurat.currentBot == null || ziggurat.currentBot == this) {
             return strength;
         }
@@ -33,23 +33,23 @@ public abstract class Bot {
         throw new IllegalStateException("You cannot get the strength of any bot except the current bot");
     }
 
-    public Set<Bot> getPlayers() {
+    public final Set<Bot> getPlayers() {
         return ziggurat.getPlayers();
     }
 
-    public void move(MoveDirection direction) {
+    public final void move(MoveDirection direction) {
         this.direction = direction;
     }
 
-    public int getElevationRelative(MoveDirection direction) {
+    public final int getElevationRelative(MoveDirection direction) {
         return ziggurat.getElevationRelative(this, direction);
     }
 
-    public int getPoints() {
+    public final int getPoints() {
         return points;
     }
 
-    public void moveUp() {
+    public final void moveUp() {
         for (MoveDirection direction : MoveDirection.values()) {
             if (getElevationRelative(direction) > getElevation()) {
                 move(direction);
@@ -58,7 +58,7 @@ public abstract class Bot {
         }
     }
 
-    public JsonObject toJson() {
+    public final JsonObject toJson() {
         JsonObject json = new JsonObject();
         json.addProperty("elevation", getElevation());
         json.addProperty("x", getPosition().x);
