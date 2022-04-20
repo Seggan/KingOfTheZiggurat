@@ -21,6 +21,6 @@ while True:
     buffer = buffer.strip()
     print(buffer)
     if buffer == "tick":
-        socket.send("UP\n".encode("utf-8"))
+        socket.send("NORTH\n".encode("utf-8"))
     elif buffer == "fight":
         socket.send("true\n".encode("utf-8"))

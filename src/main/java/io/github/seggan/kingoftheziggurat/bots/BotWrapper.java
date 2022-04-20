@@ -14,12 +14,11 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BotWrapper extends Bot implements Closeable {
 
-    private final int port = ThreadLocalRandom.current().nextInt(10000, 20000);
     private final Process process;
     private final ServerSocket server;
     private final Socket connection;
@@ -30,6 +29,7 @@ public class BotWrapper extends Bot implements Closeable {
     public BotWrapper(String... process) {
         try {
             String[] args = Arrays.copyOf(process, process.length + 1);
+            int port = ThreadLocalRandom.current().nextInt(10000, 20000);
             args[process.length] = Integer.toString(port);
             this.process = new ProcessBuilder(args).inheritIO().start();
             this.server = new ServerSocket(port);
@@ -59,7 +59,7 @@ public class BotWrapper extends Bot implements Closeable {
         out.println("tick");
         out.println(buildJson());
         try {
-            move(MoveDirection.valueOf(in.readLine()));
+            move(MoveDirection.valueOf(in.readLine().toUpperCase(Locale.ROOT)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

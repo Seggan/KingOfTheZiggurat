@@ -2,7 +2,6 @@ package io.github.seggan.kingoftheziggurat;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -130,23 +129,23 @@ public class Ziggurat {
 
     private Point move(Point position, MoveDirection direction) {
         switch (direction) {
-            case UP -> position.y--;
-            case DOWN -> position.y++;
-            case LEFT -> position.x--;
-            case RIGHT -> position.x++;
-            case UP_LEFT -> {
+            case NORTH -> position.y--;
+            case SOUTH -> position.y++;
+            case EAST -> position.x--;
+            case WEST -> position.x++;
+            case NORTH_EAST -> {
                 position.y--;
                 position.x--;
             }
-            case UP_RIGHT -> {
+            case NORTH_WEST -> {
                 position.y--;
                 position.x++;
             }
-            case DOWN_LEFT -> {
+            case SOUTH_EAST -> {
                 position.y++;
                 position.x--;
             }
-            case DOWN_RIGHT -> {
+            case SOUTH_WEST -> {
                 position.y++;
                 position.x++;
             }
