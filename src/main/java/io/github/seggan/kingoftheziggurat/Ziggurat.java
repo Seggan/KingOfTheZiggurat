@@ -135,19 +135,19 @@ public class Ziggurat {
             case WEST -> position.x++;
             case NORTH_EAST -> {
                 position.y--;
-                position.x--;
+                position.x++;
             }
             case NORTH_WEST -> {
                 position.y--;
-                position.x++;
+                position.x--;
             }
             case SOUTH_EAST -> {
                 position.y++;
-                position.x--;
+                position.x++;
             }
             case SOUTH_WEST -> {
                 position.y++;
-                position.x++;
+                position.x--;
             }
             default -> {
                 // do nothing
