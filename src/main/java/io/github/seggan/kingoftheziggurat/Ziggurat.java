@@ -131,8 +131,8 @@ public class Ziggurat {
         switch (direction) {
             case NORTH -> position.y--;
             case SOUTH -> position.y++;
-            case EAST -> position.x--;
-            case WEST -> position.x++;
+            case EAST -> position.x++;
+            case WEST -> position.x--;
             case NORTH_EAST -> {
                 position.y--;
                 position.x++;
