@@ -48,7 +48,7 @@ public class Main {
             new AttackBot(),
             new RandomBot(),
             new ScaredyBot(),
-            new BotWrapper("python", "test.py")
+            new BotWrapper("python", "bot.py")
         };
 
         int index;
