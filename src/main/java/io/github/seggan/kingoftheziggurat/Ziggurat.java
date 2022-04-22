@@ -14,11 +14,9 @@ public class Ziggurat {
 
     private final int[][] map;
     private final Map<Bot, Point> players = new HashMap<>();
-
-    private int round = 0;
     private final int maxRounds;
-
     Bot currentBot = null;
+    private int round = 0;
 
     public Ziggurat(int[][] map, int maxRounds, Bot... players) {
         this.map = map;
@@ -47,11 +45,21 @@ public class Ziggurat {
     private void tick() {
         for (Map.Entry<Bot, Point> entry : players.entrySet()) {
             Bot bot = entry.getKey();
+            Point p = getPosition(bot);
             if (!checkOutOfBounds(move(getPosition(bot), bot.direction))) {
                 move(entry.getValue(), bot.direction);
             }
-            bot.direction = MoveDirection.NONE;
+            if (p.distance(getPosition(bot)) < .2) {
+                if (getElevation(p) < 3) {
+                    bot.strength += 3;
+                } else if (getElevation(p) < 6) {
+                    bot.strength += 1;
+                } else {
+                    bot.strength--;
+                }
+            }
             bot.strength++;
+            bot.direction = MoveDirection.NONE;
         }
         for (Bot bot : players.keySet()) {
             for (Bot other : players.keySet()) {
@@ -66,29 +74,43 @@ public class Ziggurat {
     }
 
     private void fightBots(Bot bot, Bot other) {
-        ThreadLocalRandom r = ThreadLocalRandom.current();
         currentBot = bot;
         if (bot.fight(other)) {
             currentBot = other;
             if (other.fight(bot)) {
-                int bot1 = r.nextInt(bot.strength / 2, bot.strength);
-                int bot2 = r.nextInt(other.strength / 2, other.strength);
+                int bot1;
+                int bot2;
+                int count = 0;
+                do {
+                    bot1 = nextInt(bot.strength / 2, bot.strength);
+                    bot2 = nextInt(other.strength / 2, other.strength);
+                    count++;
+                    if (count > 10) {
+                        return;
+                    }
+                } while (bot1 == bot2);
                 if (bot1 > bot2) {
-                    other.strength -= other.strength * 0.2;
-                    bot.strength -= bot.strength * 0.1;
+                    other.strength -= Math.ceil(other.strength * 0.2);
+                    bot.strength -= Math.ceil(bot.strength * 0.1);
                     moveBotDown(other);
                 } else {
-                    if (bot1 != bot2) {
-                        bot.strength -= bot.strength * 0.2;
-                        other.strength -= other.strength * 0.1;
-                        moveBotDown(bot);
-                    }
+                    bot.strength -= Math.ceil(bot.strength * 0.2);
+                    other.strength -= Math.ceil(other.strength * 0.1);
+                    moveBotDown(bot);
                 }
             } else {
                 moveBotDown(other);
             }
         } else {
             moveBotDown(bot);
+        }
+    }
+
+    private int nextInt(int origin, int bound) {
+        if (bound <= origin) {
+            return origin;
+        } else {
+            return ThreadLocalRandom.current().nextInt(origin, bound);
         }
     }
 

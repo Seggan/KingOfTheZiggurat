@@ -2,8 +2,14 @@ package io.github.seggan.kingoftheziggurat;
 
 import io.github.seggan.kingoftheziggurat.bots.AttackBot;
 import io.github.seggan.kingoftheziggurat.bots.BotWrapper;
+import io.github.seggan.kingoftheziggurat.bots.ChaoticWalkerIII;
+import io.github.seggan.kingoftheziggurat.bots.Crab;
+import io.github.seggan.kingoftheziggurat.bots.JazzJock;
 import io.github.seggan.kingoftheziggurat.bots.RandomBot;
+import io.github.seggan.kingoftheziggurat.bots.RealisticPacifist;
 import io.github.seggan.kingoftheziggurat.bots.ScaredyBot;
+import io.github.seggan.kingoftheziggurat.bots.Ssammbot;
+import io.github.seggan.kingoftheziggurat.bots.WeightCrab;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -45,10 +51,12 @@ public class Main {
 
         // Add your bots here
         Bot[] bots = new Bot[]{
-            new AttackBot(),
-            new RandomBot(),
-            new ScaredyBot(),
-            new BotWrapper("python", "bot.py")
+            new RealisticPacifist(),
+            new ChaoticWalkerIII(),
+            new JazzJock(),
+            new Crab(),
+            new WeightCrab(),
+            //new Ssammbot("tclsh", "bot.tcl"),
         };
 
         int index;
