@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -64,12 +65,12 @@ public class Ziggurat {
             bot.direction = MoveDirection.NONE;
         }
         // group bots by position
-        HashMap<Point, ArrayList<Bot>> botsByPos = new HashMap<>();
+        Map<Point, List<Bot>> botsByPos = new HashMap<>();
         for (Bot bot : players.keySet()) {
             botsByPos.computeIfAbsent(bot.getPosition(), pos -> new ArrayList<>()).add(bot);
         }
         // fight bots in the same squares
-        for (ArrayList<Bot> here : botsByPos.values()) {
+        for (List<Bot> here : botsByPos.values()) {
             Collections.shuffle(here, ThreadLocalRandom.current());
             for (int i = 1; i < here.size(); i++) {
                 Bot aggressor = here.get(i);
