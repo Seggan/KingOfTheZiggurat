@@ -1,8 +1,11 @@
 package io.github.seggan.kingoftheziggurat;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -61,10 +64,26 @@ public class Ziggurat {
             bot.strength++;
             bot.direction = MoveDirection.NONE;
         }
+        // group bots by position
+        Map<Point, List<Bot>> botsByPos = new HashMap<>();
         for (Bot bot : players.keySet()) {
-            for (Bot other : players.keySet()) {
-                if (bot != other && bot.getPosition().equals(other.getPosition())) {
-                    fightBots(bot, other);
+            botsByPos.computeIfAbsent(bot.getPosition(), pos -> new ArrayList<>()).add(bot);
+        }
+        // fight bots in the same squares
+        for (List<Bot> here : botsByPos.values()) {
+            Collections.shuffle(here, ThreadLocalRandom.current());
+            for (int i = 1; i < here.size(); i++) {
+                Bot aggressor = here.get(i);
+                for (int j = 0; j < i; j++) {
+                    Bot defender = here.get(j);
+                    // is the defender still here, or was it knocked down already?
+                    if (defender.getPosition().equals(aggressor.getPosition())) {
+                        fightBots(aggressor, defender);
+                        // was the aggressor knocked down now?
+                        if (aggressor.getPosition().equals(defender.getPosition())) {
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -74,34 +93,35 @@ public class Ziggurat {
     }
 
     private void fightBots(Bot bot, Bot other) {
+        // ask both bots simultaneously
         currentBot = bot;
-        if (bot.fight(other)) {
-            currentBot = other;
-            if (other.fight(bot)) {
-                int bot1;
-                int bot2;
-                int count = 0;
-                do {
-                    bot1 = nextInt(bot.strength / 2, bot.strength);
-                    bot2 = nextInt(other.strength / 2, other.strength);
-                    count++;
-                    if (count > 10) {
-                        return;
-                    }
-                } while (bot1 == bot2);
-                if (bot1 > bot2) {
-                    other.strength -= Math.ceil(other.strength * 0.2);
-                    bot.strength -= Math.ceil(bot.strength * 0.1);
-                    moveBotDown(other);
-                } else {
-                    bot.strength -= Math.ceil(bot.strength * 0.2);
-                    other.strength -= Math.ceil(other.strength * 0.1);
-                    moveBotDown(bot);
+        boolean botWants = bot.fight(other);
+        currentBot = other;
+        boolean otherWants = other.fight(bot);
+        if (botWants && otherWants) {
+            int bot1;
+            int bot2;
+            int count = 0;
+            do {
+                bot1 = nextInt(bot.strength / 2, bot.strength);
+                bot2 = nextInt(other.strength / 2, other.strength);
+                count++;
+                if (count > 10) {
+                    return;
                 }
-            } else {
+            } while (bot1 == bot2);
+            if (bot1 > bot2) {
+                other.strength -= Math.ceil(other.strength * 0.2);
+                bot.strength -= Math.ceil(bot.strength * 0.1);
                 moveBotDown(other);
+            } else {
+                bot.strength -= Math.ceil(bot.strength * 0.2);
+                other.strength -= Math.ceil(other.strength * 0.1);
+                moveBotDown(bot);
             }
-        } else {
+        } else if (botWants) {
+            moveBotDown(other);
+        } else if (otherWants) {
             moveBotDown(bot);
         }
     }
