@@ -4,6 +4,9 @@ import io.github.seggan.kingoftheziggurat.bots.AttackBot;
 import io.github.seggan.kingoftheziggurat.bots.BotWrapper;
 import io.github.seggan.kingoftheziggurat.bots.ChaoticWalkerIII;
 import io.github.seggan.kingoftheziggurat.bots.Crab;
+import io.github.seggan.kingoftheziggurat.bots.CrabberInTraining;
+import io.github.seggan.kingoftheziggurat.bots.GreedyBot;
+import io.github.seggan.kingoftheziggurat.bots.GroundUpBot;
 import io.github.seggan.kingoftheziggurat.bots.JazzJock;
 import io.github.seggan.kingoftheziggurat.bots.RandomBot;
 import io.github.seggan.kingoftheziggurat.bots.RealisticPacifist;
@@ -56,6 +59,9 @@ public class Main {
             new JazzJock(),
             new Crab(),
             new WeightCrab(),
+            new GreedyBot(),
+            new CrabberInTraining(),
+            new GroundUpBot()
             //new Ssammbot("tclsh", "bot.tcl"),
         };
 
